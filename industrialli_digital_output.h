@@ -1,7 +1,18 @@
 #ifndef INDUSTRIALLI_DIGITALOUTPUT_H
 #define INDUSTRIALLI_DIGITALOUTPUT_H
 
+#include <Arduino.h>
+#include <SPI.h>
+
 #include "leds/industrialli_leds.h"
+
+#define SPI4_SCK PE2
+#define SPI4_NSS PE4
+#define SPI4_MOSI PE6
+#define SPI4_MISO PE5
+#define ISO_DIS PE3
+#define IC1_ISO_DIAG PC0
+#define IC2_ISO_DIAG PC1
 
 #define Q01 1
 #define Q02 2
@@ -21,7 +32,7 @@
 #define Q15 15
 #define Q16 16
 
-extern SPI_HandleTypeDef hspi4;
+extern SPIClass spi_iso;
 extern industrialli_leds leds;
 
 class industrialli_digital_output{
@@ -35,8 +46,8 @@ public:
     
     void update_power_leds_status();
 
-    bool output_1_to_8_status();
-    bool output_9_to_16_status();
+    bool Q01_to_Q08_alarm();
+    bool Q09_to_Q16_alarm();
 
 private:
     uint16_t digital_outputs;
