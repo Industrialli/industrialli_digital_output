@@ -2,20 +2,20 @@
 
 # industrialli digital output
 
-Biblioteca para manipulação das saídas digitais da Industrialli Hub, com a utilização da biblioteca Hardware Abstraction Layer (HAL).
+Biblioteca para manipulação das saídas digitais da Industrialli Hub para o framework Arduino com o uso da biblioteca [stm32ino](https://github.com/stm32duino/).
 
 > [!IMPORTANT]  
 > Consulte a biblioteca geral da Industrialli Hub.
 
 ## Exemplo
-No exemplo abaixo, é inicializado a biblioteca de saídas digitais e ativado o CI que controla as saídas digitais isoladas, logo em seguida as saídas Q01, Q08 e Q16 são ativadas, e as saídas Q05 e Q14 são desativadas.
+No exemplo abaixo, é inicializado a biblioteca de saídas digitais, ativado o CI que controla as saídas digitais isoladas, as saídas Q01, Q08 e Q16 são ativadas, as saídas Q05 e Q14 são desativadas, enviado as informações para o CI e por fim configurado os leds de indicação da alimentação das saídas digitais.
 
 ```cpp
 #include "industrialli_hub.hpp"
 
 industrialli_hub hub;
 
-int main(){
+void setup(){
     hub.begin();
 
     digital_output.begin();
@@ -26,11 +26,11 @@ int main(){
     digital_output.write(Q14, LOW);
     digital_output.write(Q16, HIGH);
     digital_output.update();
+}
+
+void loop(){
     digital_output.update_power_leds_status();
     leds.update();
-  
-    while(1){
-    }
 }
 ```
 
@@ -49,7 +49,10 @@ Inicializa as saídas digitais.
 
 **Exemplo**
 ```cpp
-digital_output.begin();
+void setup(){
+    hub.begin();
+    digital_output.begin();
+}
 ```
 </details>
 
@@ -64,7 +67,11 @@ Ativa o CI que controla as saídas digitais isoladas.
 
 **Exemplo**
 ```cpp
-digital_output.enable();
+void setup(){
+    hub.begin();
+    digital_output.begin();
+    digital_output.enable();
+}
 ```
 </details>
 
@@ -79,7 +86,11 @@ Desativa o CI que controla as saídas digitais isoladas.
 
 **Exemplo**
 ```cpp
-digital_output.disable();
+void setup(){
+    hub.begin();
+    digital_output.begin();
+    digital_output.disable();
+}
 ```
 </details>
 
@@ -95,7 +106,21 @@ Envia as configurações de quais saídas devem ser ativadas ou desativadas para
 
 **Exemplo**
 ```cpp
-digital_output.update();
+void setup(){
+    hub.begin();
+
+    digital_output.begin();
+    digital_output.enable();
+    digital_output.write(Q01, HIGH);
+    digital_output.update();
+}
+
+void loop(){
+    digital_output.write(Q01, LOW);
+    digital_output.update();
+
+    leds.update();
+}
 ```
 </details>
 
@@ -105,18 +130,29 @@ digital_output.update();
 Configura uma saída digital como ligada ou desligada.
 
 **Parâmetros:** 
-- DIGITAL_PIN: Enum das saídas digítais: Q01, Q02, ... Q16.
+- uint8_t: Enum das saídas digítais: Q01, Q02, ... Q16.
 - bool: Valor da saída digital: 0/LOW para desligar a saída digital e 1/HIGH para ligar a saída digital.
 
 **Retorno:** void
 
 **Exemplo**
 ```cpp
-digital_output.write(Q01, HIGH);
-digital_output.write(Q05, LOW);
-digital_output.write(Q08, HIGH);
-digital_output.write(Q14, LOW);
-digital_output.write(Q16, HIGH);
+void setup(){
+    hub.begin();
+
+    digital_output.begin();
+    digital_output.enable();
+    digital_output.write(Q01, HIGH);
+    digital_output.write(Q05, LOW);
+    digital_output.write(Q08, HIGH);
+    digital_output.write(Q14, LOW);
+    digital_output.write(Q16, HIGH);
+    digital_output.update();
+}
+
+void loop(){
+    leds.update();
+}
 ```
 </details>
 
@@ -131,8 +167,56 @@ Configura os leds de indicação da alimentação das saídas digitais. As saíd
 
 **Exemplo**
 ```cpp
-digital_output.update_power_leds_status();
-leds.update();
+void loop(){
+    digital_output.update_power_leds_status();
+    leds.update();
+}
+
 ```
 </details>
-  
+
+<details>
+<summary>Q01_to_Q08_alarm</summary>
+
+Retorna o status da alimentação das saídas digitais de Q01 até Q08.
+
+**Parâmetros:** void
+
+**Retorno:** 
+- bool: retorna verdadeiro se houver alguma anomalia nas entradas digitais entre Q01 e Q08.
+
+**Exemplo**
+```cpp
+void loop(){
+    if(Q01_to_Q08_alarm()){
+        error = true;
+    }
+
+    leds.update();
+}
+
+```
+</details>
+
+<details>
+<summary>Q09_to_Q16_alarm</summary>
+
+Retorna o status das saídas digitais de Q09 até Q16.
+
+**Parâmetros:** void
+
+**Retorno:** 
+- bool: retorna verdadeiro se houver alguma anomalia nas entradas digitais entre Q09 e Q16.
+
+**Exemplo**
+```cpp
+void loop(){
+    if(Q09_to_Q16_alarm()){
+        error = true;
+    }
+
+    leds.update();
+}
+
+```
+</details>
