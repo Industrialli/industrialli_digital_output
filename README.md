@@ -5,7 +5,7 @@
 Biblioteca para manipulação das saídas digitais da Industrialli Hub para o framework Arduino com o uso da biblioteca [stm32ino](https://github.com/stm32duino/).
 
 > [!IMPORTANT]  
-> Consulte a biblioteca geral da Industrialli Hub.
+> Consulte a biblioteca geral da Industrialli Hub [🔗](https://github.com/Industrialli/Industrialli-Hub).
 
 ## Exemplo
 No exemplo abaixo, é inicializado a biblioteca de saídas digitais, ativado o CI que controla as saídas digitais isoladas, as saídas Q01, Q08 e Q16 são ativadas, as saídas Q05 e Q14 são desativadas, enviado as informações para o CI e por fim configurado os leds de indicação da alimentação das saídas digitais.
